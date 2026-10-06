@@ -137,7 +137,7 @@ const GameMatch = {
       this.matchedInRound++;
       this.pickedImg.btn.classList.add("matched");
       this.pickedWord.btn.classList.add("matched");
-      AudioManager.speak(this.pickedImg.word.en + " !");
+      AudioManager.speak(this.pickedImg.word.en);
       this.pickedImg.btn.disabled = true;
       this.pickedWord.btn.disabled = true;
       this.pickedImg = null;
