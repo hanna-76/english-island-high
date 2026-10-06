@@ -1,0 +1,546 @@
+﻿/* ============================================================
+ * game.css —— 游戏相关样式（各题型专属 + 学习报告页）
+ *
+ * 包含：
+ *   1. 听音找图：图片选项卡片
+ *   2. 词图配对：配对面板
+ *   3. 拼单词：空格槽与字母按钮
+ *   4. 句子排序：单词卡片
+ *   5. 情境选择：情境题选项
+ *   6. 学习报告页：统计面板与进度条
+ * ============================================================ */
+
+/* ----------------------------------------------------------
+ * 听音找图：图片选项网格
+ * 两列布局，列间距 14px
+ * ---------------------------------------------------------- */
+.img-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+/* ----------------------------------------------------------
+ * .img-card：图片选项卡片
+ * 正方形，白底圆角 20px，默认 4px 透明边框
+ * 72px 大 emoji，flex 居中，0.2s 过渡动画
+ * ---------------------------------------------------------- */
+.img-card {
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: 20px;
+  border: 4px solid transparent;
+  font-size: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ----------------------------------------------------------
+ * .img-card.right：答对状态，绿边浅绿底
+ * ---------------------------------------------------------- */
+.img-card.right {
+  border-color: #4caf50;
+  background: #e8f5e9;
+}
+
+/* ----------------------------------------------------------
+ * .img-card.wrong：答错状态，红边浅红底 + 抖动动画
+ * ---------------------------------------------------------- */
+.img-card.wrong {
+  border-color: #f44336;
+  background: #ffebee;
+  animation: shake 0.3s;
+}
+
+/* ----------------------------------------------------------
+ * @keyframes shake：抖动动画
+ * 0%/100% 原位，25% 左移 5px，75% 右移 5px
+ * ---------------------------------------------------------- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ----------------------------------------------------------
+ * 词图配对：配对面板
+ * 两列网格，列间距 20px
+ * ---------------------------------------------------------- */
+.match-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+/* ----------------------------------------------------------
+ * .match-col：配对列，flex 纵向排列
+ * ---------------------------------------------------------- */
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ----------------------------------------------------------
+ * .match-img, .match-word：配对卡片
+ * 最小高度 56px，白底圆角 12px，18px 字号
+ * ---------------------------------------------------------- */
+.match-img, .match-word {
+  min-height: 56px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ----------------------------------------------------------
+ * .match-img 内的 emoji：36px
+ * ---------------------------------------------------------- */
+.match-img .emoji { font-size: 36px; }
+
+/* ----------------------------------------------------------
+ * .match-img.selected, .match-word.selected：选中状态
+ * 3px 粉色外轮廓高亮
+ * ---------------------------------------------------------- */
+.match-img.selected, .match-word.selected {
+  outline: 3px solid #ff9a9e;
+}
+
+/* ----------------------------------------------------------
+ * .match-img.matched, .match-word.matched：已配对状态
+ * 浅绿背景 + 0.6 半透明
+ * ---------------------------------------------------------- */
+.match-img.matched, .match-word.matched {
+  background: #c8e6c9;
+  opacity: 0.6;
+}
+
+/* ----------------------------------------------------------
+ * .match-img.wrong, .match-word.wrong：配对失败，浅红底
+ * ---------------------------------------------------------- */
+.match-img.wrong, .match-word.wrong {
+  background: #ffcdd2;
+}
+
+/* ----------------------------------------------------------
+ * 拼单词：游戏容器，文字居中
+ * ---------------------------------------------------------- */
+.spell-box { text-align: center; }
+
+/* ----------------------------------------------------------
+ * .spell-emoji：拼词题大 emoji，80px
+ * ---------------------------------------------------------- */
+.spell-emoji {
+  font-size: 80px;
+  margin: 10px 0;
+}
+
+/* ----------------------------------------------------------
+ * .spell-slots：空格槽容器，flex 横向居中
+ * ---------------------------------------------------------- */
+.spell-slots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0;
+}
+
+/* ----------------------------------------------------------
+ * .slot：单个空格槽
+ * 40×48px，底部 3px 粉色下划线，28px 粗体
+ * ---------------------------------------------------------- */
+.slot {
+  width: 40px;
+  height: 48px;
+  border-bottom: 3px solid #ff9a9e;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: lowercase;
+}
+
+/* ----------------------------------------------------------
+ * .slot.right：拼对，浅绿底圆角
+ * ---------------------------------------------------------- */
+.slot.right {
+  background: #c8e6c9;
+  border-radius: 8px;
+}
+
+/* ----------------------------------------------------------
+ * .slot.wrong：拼错，浅红底圆角
+ * ---------------------------------------------------------- */
+.slot.wrong {
+  background: #ffcdd2;
+  border-radius: 8px;
+}
+
+/* ----------------------------------------------------------
+ * .spell-letters：字母按钮容器，flex 换行居中
+ * ---------------------------------------------------------- */
+.spell-letters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ----------------------------------------------------------
+ * .letter-btn：字母按钮
+ * 48×48px，圆角 12px，白底蓝边，22px 粗体
+ * :disabled 禁用时 0.4 透明度
+ * ---------------------------------------------------------- */
+.letter-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #a1c4fd;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+.letter-btn:disabled { opacity: 0.4; }
+
+/* ----------------------------------------------------------
+ * 句子排序：游戏容器，文字居中
+ * ---------------------------------------------------------- */
+.sentence-box { text-align: center; }
+
+/* ----------------------------------------------------------
+ * .sentence-answer：答案区
+ * 最小高度 56px，白底圆角 12px，flex 换行居中
+ * .right 正确浅绿底，.wrong 错误浅红底
+ * ---------------------------------------------------------- */
+.sentence-answer {
+  min-height: 56px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  margin: 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+.sentence-answer.right { background: #c8e6c9; }
+.sentence-answer.wrong { background: #ffcdd2; }
+
+/* ----------------------------------------------------------
+ * .sentence-pool：待选单词池，flex 换行居中
+ * ---------------------------------------------------------- */
+.sentence-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ----------------------------------------------------------
+ * .word-chip：单词卡片
+ * 内边距 8px 14px，白底圆角 16px，2px 蓝边，16px
+ * .used 已使用 0.3 透明度，.placed 已放入答案区蓝底白字
+ * ---------------------------------------------------------- */
+.word-chip {
+  padding: 8px 14px;
+  background: #fff;
+  border-radius: 16px;
+  border: 2px solid #a1c4fd;
+  font-size: 16px;
+  cursor: pointer;
+}
+.word-chip.used { opacity: 0.3; }
+.word-chip.placed {
+  background: #a1c4fd;
+  color: #fff;
+}
+
+/* ----------------------------------------------------------
+ * 情境选择：情境题容器
+ * ---------------------------------------------------------- */
+.scenario-box {
+  text-align: center;
+}
+
+/* ----------------------------------------------------------
+ * .scenario-desc：情境描述文字
+ * 浅蓝底圆角，内边距 16px，16px 字号，上下外边距 12px
+ * ---------------------------------------------------------- */
+.scenario-desc {
+  background: #e3f2fd;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  color: #333;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+/* ----------------------------------------------------------
+ * .scenario-options：情境题选项列表
+ * flex 纵向排列，子元素间距 10px
+ * ---------------------------------------------------------- */
+.scenario-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ----------------------------------------------------------
+ * .scenario-option：单个情境选项按钮
+ * 白底圆角 12px，内边距 14px，文字左对齐
+ * 16px 字号，默认 3px 透明边框
+ * .right 正确绿边浅绿底，.wrong 错误红边浅红底
+ * ---------------------------------------------------------- */
+.scenario-option {
+  background: #fff;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  padding: 14px;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.scenario-option.right {
+  border-color: #4caf50;
+  background: #e8f5e9;
+}
+.scenario-option.wrong {
+  border-color: #f44336;
+  background: #ffebee;
+}
+
+/* ----------------------------------------------------------
+ * 学习报告页：报告容器
+ * ---------------------------------------------------------- */
+.report-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ----------------------------------------------------------
+ * .report-title：报告标题
+ * 18px 粗体，居中，底部留 16px
+ * ---------------------------------------------------------- */
+.report-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #ff6b9d;
+}
+
+/* ----------------------------------------------------------
+ * .report-summary：总览数据行
+ * flex 横向排列，两端对齐，底部留 16px，下边框虚线
+ * ---------------------------------------------------------- */
+.report-summary {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px dashed #ddd;
+}
+
+/* ----------------------------------------------------------
+ * .report-stat：单个统计项
+ * 文字居中
+ * ---------------------------------------------------------- */
+.report-stat {
+  text-align: center;
+}
+
+/* ----------------------------------------------------------
+ * .report-stat .num：统计数字
+ * 24px 粗体，粉红色
+ * ---------------------------------------------------------- */
+.report-stat .num {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6b9d;
+}
+
+/* ----------------------------------------------------------
+ * .report-stat .label：统计标签
+ * 12px 灰色
+ * ---------------------------------------------------------- */
+.report-stat .label {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ----------------------------------------------------------
+ * .report-theme-row：单个主题的学习进度行
+ * flex 横向排列，垂直居中，子元素间距 10px
+ * 上下内边距 8px
+ * ---------------------------------------------------------- */
+.report-theme-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+/* ----------------------------------------------------------
+ * .report-theme-name：主题名称
+ * 宽度 70px，14px 字号，flex 不收缩
+ * ---------------------------------------------------------- */
+.report-theme-name {
+  width: 70px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+ * .report-theme-bar：主题正确率进度条外框
+ * flex 占满剩余空间，高度 12px，浅灰底圆角
+ * ---------------------------------------------------------- */
+.report-theme-bar {
+  flex: 1;
+  height: 12px;
+  background: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ----------------------------------------------------------
+ * .report-theme-fill：进度条填充
+ * 高度 100%，粉橙渐变，宽度由 JS 动态设置
+ * ---------------------------------------------------------- */
+.report-theme-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b9d, #ffa751);
+  border-radius: 6px;
+}
+
+/* ----------------------------------------------------------
+ * .report-theme-pct：主题正确率百分比
+ * 宽度 45px，14px 粗体，文字右对齐，flex 不收缩
+ * ---------------------------------------------------------- */
+.report-theme-pct {
+  width: 45px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+ * .report-empty：无数据提示
+ * 文字居中，灰色，上下外边距 20px
+ * ---------------------------------------------------------- */
+.report-empty {
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
+  font-size: 14px;
+}
+
+/* 颜色主题的纯颜色块 */
+.color-block {
+  width: 80%;
+  height: 80%;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.match-img .color-block {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+}
+.spell-emoji .color-block {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+}
+/* ============================================================
+ * 暂停遮罩样式
+ * ============================================================ */
+.pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.pause-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.pause-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+.pause-box .btn-primary {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+/* ----------------------------------------------------------
+ * 难度选择按钮
+ * ---------------------------------------------------------- */
+.difficulty-btn {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.difficulty-btn:hover {
+  border-color: #ff9a9e;
+}
+.difficulty-btn.active {
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+  color: #fff;
+  border-color: #ff9a9e;
+  font-weight: bold;
+}
+
+/* 提示高亮：easy难度答错后短暂高亮正确答案 */
+.hint-right {
+  border-color: #4caf50 !important;
+  background: #e8f5e9 !important;
+  animation: pulse 0.5s ease-in-out 2;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* 拼单词提示字母样式 */
+.hint-letter {
+  color: #ff9800;
+  font-weight: bold;
+  background: #fff3e0;
+}

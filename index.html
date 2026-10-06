@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <title>英语奇趣岛（高档版）</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ========== 屏幕 1：首页 ========== -->
+    <section class="screen active" id="screenHome">
+      <div class="topbar">
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <div class="hero">
+        <h1>🏝️ 英语奇趣岛</h1>
+        <p>听一听 · 找一找 · 拼一拼</p>
+      </div>
+
+      <button class="btn-primary" onclick="App.showTaskSelect()">🚀 开始游戏</button>
+      <button class="btn-primary btn-secondary" onclick="App.showReport()">📊 学习报告</button>
+      <button class="btn-primary btn-secondary" id="btnWrongReview" onclick="App.reviewWrong()" style="background:#fff3e0;color:#e65100;border-color:#ffcc80;display:none">📕 错题复习</button>
+    </section>
+
+    <!-- ========== 屏幕 2：选择任务类型 ========== -->
+    <section class="screen" id="screenTask">
+      <div class="topbar">
+        <button onclick="App.showHome()">⬅️</button>
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <h2 style="text-align:center">选一种玩法</h2>
+      <div class="task-grid">
+        <button class="task-card" id="taskListen" onclick="App.pickTask('listening')">
+          <span class="emoji">🔊</span>
+          <span>听音找图</span>
+        </button>
+        <button class="task-card" id="taskMatch" onclick="App.pickTask('match')">
+          <span class="emoji">🧩</span>
+          <span>词图配对</span>
+        </button>
+        <button class="task-card" id="taskSpell" onclick="App.pickTask('spell')">
+          <span class="emoji">🔤</span>
+          <span>拼单词</span>
+        </button>
+        <button class="task-card" id="taskSentence" onclick="App.pickTask('sentence')">
+          <span class="emoji">💬</span>
+          <span>排句子</span>
+        </button>
+        <button class="task-card" id="taskScenario" onclick="App.pickTask('scenario')">
+          <span class="emoji">🎯</span>
+          <span>情境选择</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== 屏幕 3：选择主题 + 难度 ========== -->
+    <section class="screen" id="screenTheme">
+      <div class="topbar">
+        <button onclick="App.showTaskSelect()">⬅️</button>
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <h2 style="text-align:center">选一个主题岛</h2>
+      <!-- 难度选择 -->
+      <div style="text-align:center;margin-bottom:16px">
+        <p style="font-size:14px;color:#666;margin-bottom:8px">选择难度（游戏中会根据表现自动调整）</p>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <button class="difficulty-btn active" data-diff="easy" onclick="App.setDifficulty('easy')">😊 简单</button>
+          <button class="difficulty-btn" data-diff="normal" onclick="App.setDifficulty('normal')">😎 中等</button>
+          <button class="difficulty-btn" data-diff="hard" onclick="App.setDifficulty('hard')">🔥 困难</button>
+        </div>
+      </div>
+      <div id="themeGrid"></div>
+    </section>
+
+    <!-- ========== 屏幕 5：游戏进行中 ========== -->
+    <section class="screen" id="screenGame">
+      <div class="topbar">
+        <button onclick="App.confirmExit()">🚪</button>
+        <button id="btnPause" onclick="App.togglePause()" aria-label="暂停">⏸️</button>
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <div id="progressWrap"><div id="progressBar"></div></div>
+      <div id="stage"></div>
+      <!-- 暂停遮罩 -->
+      <div id="pauseOverlay" class="pause-overlay" style="display:none">
+        <div class="pause-box">
+          <p class="pause-title">⏸️ 游戏暂停</p>
+          <button class="btn-primary" onclick="App.togglePause()">▶️ 继续游戏</button>
+          <button class="btn-primary btn-secondary" onclick="App.confirmExit()">🚪 退出关卡</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 屏幕 6：结算 ========== -->
+    <section class="screen" id="screenResult">
+      <div class="topbar">
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <h2 style="text-align:center">🎉 完成啦！</h2>
+      <div id="resultText"></div>
+      <div id="wrongReviewBox"></div>
+      <button class="btn-primary" onclick="App.showThemeSelect()">🔁 再玩一次</button>
+      <button class="btn-primary btn-secondary" onclick="App.showHome()">🏠 回首页</button>
+    </section>
+
+    <!-- ========== 屏幕 7：学习报告 ========== -->
+    <section class="screen" id="screenReport">
+      <div class="topbar">
+        <button onclick="App.showHome()">🏠</button>
+        <button id="btnMute" aria-label="静音">🔊</button>
+      </div>
+      <h2 style="text-align:center">📊 学习报告</h2>
+      <div id="reportContent"></div>
+      <button class="btn-primary btn-secondary" onclick="App.showHome()" style="margin-top:20px">🏠 回首页</button>
+    </section>
+
+  </div>
+
+  <!-- 按依赖顺序加载脚本 -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/game-listening.js"></script>
+  <script src="js/game-match.js"></script>
+  <script src="js/game-spell.js"></script>
+  <script src="js/game-sentence.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
